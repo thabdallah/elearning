@@ -1,0 +1,60 @@
+{% extends 'layout.twig' %}
+
+{% block title %} Liste des cours {% endblock  %}
+
+{% block content %} 
+
+{% if result.error|length > 0 %}
+<div class="alert alert-danger">
+  <strong>{{ result.error }}</strong> 
+</div>
+{% else %}
+  {% if result.success|length > 0 %}
+<div class="alert alert-success">
+  <strong>{{ result.success }}</strong> 
+</div>
+  {% endif %}
+{% endif %}
+<br>
+ 
+ <div class="row">
+ <div class="offset-sm-4 col-sm-4">
+<div class="card">
+  <div class="card-header" style="font-size: 25px; background-color: #21CFFF">Changer votre mot de passe</div>
+  <div class="card-body">
+<form method="post" action="/change/edit">
+<div class="mb-3">
+   <label for="" class="form-label">Ancien Password</label>
+   <input type="password"
+     class="form-control form-control-lg" name="ancien"  placeholder="Entrer l'ancien mot de passe" autocomplete="off" required>
+  </div>
+<div class="mb-3">
+   <label for="" class="form-label">Nouveau Password</label>
+ <input type="password"
+     class="form-control form-control-lg" name="nouveau"  placeholder="Entrer le nouveau mot de passe" autocomplete="off" required>
+  </div>
+ <div class="mb-3">
+   <label for="" class="form-label">Confirme Password</label>
+   <input type="password"
+     class="form-control form-control-lg" name="confirme"  placeholder="Confirmer le nouveau mot de passe" autocomplete="off" required>
+  </div>
+<a href="/module1/list" class="btn btn-danger">RETOUR</a>
+<button type="submit" class="btn btn-success" style="float: right">CHANGER</button>
+
+</form>
+  </div>
+
+</div>
+</div>
+</div>
+
+{% endblock %} 
+
+
+{% block js %}
+<script>
+$(document).ready(function() {
+ 
+} );
+</script>
+{% endblock %}

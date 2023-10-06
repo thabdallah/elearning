@@ -1,0 +1,148 @@
+{% extends 'layout.twig' %}
+
+{% block title %} Liste des etudiant_section {% endblock  %}
+
+{% block content %} 
+
+
+{% if result.error|length > 0 %}
+<div class="alert alert-danger">
+  <strong>{{ result.error }}</strong> 
+</div>
+{% else %}
+  {% if result.success|length > 0 %}
+<div class="alert alert-success">
+  <strong>{{ result.success }}</strong> 
+</div>
+  {% endif %}
+{% endif %}
+<h4 align ='center'>GESTION DES ETUDIANTS PAR SECTION</h4>
+<h4 style ='color:green' align ="center">ANNEE EN COURS EST : {{annee.lib_anneescolaire}}</h4>
+  {% if viewMode=='CREATE' %}
+
+ <div class="row">
+    <div class="col-sm-4">
+<div class="card">
+  <div class="card-header" style="font-size: 25px; background-color: #21CFFF">Formualaire ajout etudiant section</div>
+  <div class="card-body">
+<form method="post" action="/etudiant_section/save">
+ <div class="mb-3">
+   <label for="" class="form-label">Etudiant</label>
+   <select name='etudiant' class="form-control form-control-lg select2menu" required>
+      <option value=''>Veuillez choisir un etudiant</option>
+      {% for e in etudiants %}
+        <option value='{{e.id_etudiant}}'>{{e.nom_etudiant}} {{e.prenom_etudiant}}</option>
+      {% endfor %}
+   </select>
+ </div>
+
+ <div class="mb-3">
+   <label for="" class="form-label">Section</label>
+   <select name='section' class="form-control form-control-lg select2menu" required>
+      <option value=''>Veuillez choisir une section</option>
+      {% for s in sections %}
+        <option value='{{s.id_section}}'>{{s.lib_filiere}} {{s.lib_niveau}}</option>
+      {% endfor %}
+   </select>
+ </div>
+
+<button type="reset" class="btn btn-danger">VIDER</button>
+<button type="submit" class="btn btn-success" style="float: right">AJOUTER</button>
+
+</form>
+  </div>
+
+</div>
+    </div>
+
+
+    <div class="col-sm-8">
+<div class="card">
+  <div class="card-header" style="font-size: 25px; background-color: #903800; color: white">Liste des etudiants par section</div>
+  <div class="card-body data_table">
+ <table id="example" class="table table-bordered table-striped" style="width:100%">
+    <thead>
+      <tr>
+        {# <th>RANG</th> #}
+        <th>ETUDIANT</th>
+        <th>SECTION</th>
+        <th>ACTIONS</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for es in etudiant_sections %}
+       <tr>
+        {# <td>{{num}}</td> #}
+        <td>{{es.etudiants}}</td>
+        <td> {{es.sections}}</td>
+        <td>
+        <a href="/etudiant_section/list/EDIT/{{ es.id_etudiant_section }}" class="btn btn-outline-primary btn-md">
+          <i class="fa fa-edit"></i>
+        </a>
+        <a href="/etudiant_section/delete/{{ es.id_etudiant_section }}" class="btn btn-outline-danger btn-md" onclick="return window.confirm('Etes vous sure vouloir supprimer cet etudiant dans la section ?')">
+          <i class="fa fa-trash"></i>
+        </a>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  
+  </div>
+
+</div>
+    </div>
+
+    
+</div>
+ 
+ {% endif %}
+
+{% if viewMode=='EDIT' %}
+ <div class='row'>
+    <div class='offset-sm-4 col-sm-4'>
+
+<div class="card">
+  <div class="card-header" style="font-size: 25px; background-color: #00E161">Formualaire modification etudiant section </div>
+  <div class="card-body">
+<form method="post" action="/etudiant_section/edit">
+ <input type='hidden' value='{{etudiant_section.id_etudiant_section}}' name='id'>
+ <div class="mb-3">
+   <label for="" class="form-label">Etudiant</label>
+   <select name='etudiant' class="form-control form-control-lg select2menu" required>
+      {% for e in etudiants %}
+        <option value='{{e.id_etudiant}}'  {% if e.id_etudiant==etudiant_section.etudiant %} selected {% endif %}>{{e.nom_etudiant}} {{e.prenom_etudiant}}</option>
+      {% endfor %}
+   </select>
+  
+ </div>
+
+ <div class="mb-3">
+   <label for="" class="form-label">Section</label>
+   <select name='section' class="form-control form-control-lg select2menu" required>
+      {% for s in sections %}
+        <option value='{{s.id_section}}'  {% if s.id_section==etudiant_section.section %} selected {% endif %}>{{s.lib_filiere}} {{s.lib_niveau}}</option>
+      {% endfor %}
+   </select>
+  
+ </div>
+<a href="/etudiant_section/list/CREATE" class="btn btn-danger">RETOUR</a>
+<button type="submit" class="btn btn-success" style="float: right">MODIFIER</button>
+</form>
+  </div>
+
+</div>
+ </div>
+ {% endif %}
+    
+
+
+{% endblock %} 
+
+
+{% block js %}
+<script>
+$(document).ready(function() {
+ 
+} );
+</script>
+{% endblock %}

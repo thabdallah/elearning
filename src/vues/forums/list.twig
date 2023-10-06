@@ -1,0 +1,79 @@
+{% extends 'layout_professeur.twig' %}
+
+{% block title %} Liste des années {% endblock  %}
+
+{% block content %} 
+
+
+{% if result.error|length > 0 %}
+<div class="alert alert-danger">
+  <strong>{{ result.error }}</strong> 
+</div>
+{% else %}
+  {% if result.success|length > 0 %}
+<div class="alert alert-success">
+  <strong>{{ result.success }}</strong> 
+</div>
+  {% endif %}
+{% endif %}
+<h4 align='center'>GESTION DES ETUDIANTS</h4>
+<br>
+ <div class="row">
+    <div class="col-sm-4">
+<div class="card">
+  {# <div class="card-header" style="font-size: 25px; background-color: #21CFFF">Formualaire messagerie</div> #}
+  <div class="card-body">
+<form method="post" action="/forum/save">
+ <div class="mb-3">
+   <label for="" class="form-label">Texte</label>
+   <textarea
+     class="form-control form-control-lg" name="annee" placeholder="Entrer le message" autocomplete="off" required>
+  </textarea>
+ </div>
+
+<button type="reset" class="btn btn-danger">VIDER</button>
+<button type="submit" class="btn btn-success" style="float: right">ENVOYER</button>
+</form>
+  </div>
+</div>
+    </div>
+
+    <div class="col-sm-8">
+<div class="card">
+  {# <div class="card-header" style="font-size: 25px; background-color: #21CFFF; color: black">Liste des discussions</div> #}
+  <div class="card-body data_table">
+ <table class="table table-bordered table-striped " style="width:100%">
+    <thead>
+      <tr>
+        <th>MESSAGE</th>
+        <th>ACTIONS</th>
+      </tr>
+    </thead>
+    <tbody>
+        {# {% for a in annees %} #}
+       <tr>
+        <td>{{a.lib_anneescolaire}}</td>
+        <td>
+        <a href="/annee/delete/{{ a.id_anneescolaire }}" class="btn btn-outline-danger btn-md" onclick="return window.confirm('Etes vous sure vouloir supprimer cette année ?')">
+          <i class="fa fa-trash"></i>
+        </a>
+        </td>
+      </tr>
+    {# {% endfor %} #}
+    </tbody>
+  </table>
+  </div>
+</div>
+</div>
+</div>
+
+
+{% endblock %} 
+
+{% block js %}
+<script>
+$(document).ready(function() {
+ 
+} );
+</script>
+{% endblock %}

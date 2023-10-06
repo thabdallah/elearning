@@ -1,0 +1,120 @@
+{% extends 'layout_professeur.twig' %}
+
+{% block title %} Liste des evaluations {% endblock  %}
+
+{% block content %} 
+
+
+{% if result.error|length > 0 %}
+<div class="alert alert-danger">
+  <strong>{{ result.error }}</strong> 
+</div>
+{% else %}
+  {% if result.success|length > 0 %}
+<div class="alert alert-success">
+  <strong>{{ result.success }}</strong> 
+</div>
+  {% endif %}
+{% endif %}
+<marquee behavior="alternate"><h3>BIENVENU CHER ENSEIGNANT Mr/Mme {{who_done}}</h3></marquee>
+<br>
+ <div class="row">
+    <div class="col-sm-4">
+<div class="card">
+  <div class="card-header" style="font-size: 25px; background-color: #21CFFF">Formualaire ajout evaluation</div>
+  <div class="card-body">
+<form method="post" action="/evaluation/save" enctype="multipart/form-data">
+
+<div class="mb-3">
+   <label for="" class="form-label">Module</label>
+   <select class="form-control form-control-md" name="cours" required>
+    <option value=''>Veuillez selectionnez un cours</option>
+    {% for c in cour %}
+    <option value='{{c.id_prof_module}}'>{{c.lib_module}} {{c.section}}</option>
+    {% endfor %}
+   </select>
+  </div>
+  <div class="mb-3">
+   <label for="" class="form-label">Evaluation</label>
+   <input type="file"
+     class="form-control form-control-md" name="fichier"  placeholder="Entrer le module" autocomplete="off" required>
+ </div>
+ {#<div class="mb-3">
+   <label for="" class="form-label">Evaluation</label>
+   <select class="form-control form-control-md" name="cours" required>
+    <option value=''>Veuillez selectionnez un cours</option>
+    <option value=''>XML</option>
+   </select>
+   <a href="">Upload</a>
+  </div>
+  <div class="mb-3">
+   <label for="" class="form-label">Classe</label>
+   <select class="form-control form-control-md" name="classe" required>
+    <option value=''>Veuillez selectionnez une classe</option>
+    <option value=''>Genie Logiciel Master 2ème année</option>
+   </select>
+  </div>
+  <div class="mb-3">
+   <label for="" class="form-label">Année</label>
+   <select class="form-control form-control-md" name="annee" required>
+    <option value=''>Veuillez selectionnez une année</option>
+    <option value=''>2021-2022</option>
+    <option value=''>2022-2023</option>
+   </select>
+  </div>
+  #}
+
+<button type="reset" class="btn btn-danger">VIDER</button>
+<button type="submit" class="btn btn-success" style="float: right">UPLOAD</button>
+</form>
+  </div>
+
+</div>
+    </div>
+
+
+    
+
+    <div class="col-sm-8">
+<div class="card">
+  <div class="card-header" style="font-size: 25px; background-color: blue; color: white">Liste des evaluations</div>
+  <div class="card-body">
+ <table class="table table-bordered" id="dTable" >
+    <thead>
+      <tr>
+        <th>MODULE</th>
+        <th>EVALUATION</th>
+        <th>CLASSE</th>
+        <th>PROFESSEURS</th>
+        <th>ANNEE</th>
+      </tr>
+    </thead>
+    <tbody>
+       {% for e in evaluations %}
+       <tr>
+        <td>{{e.lib_module}}</td>
+        <td>{{e.evaluation}}</td>
+        <td>{{e.section}}</td>
+        <td>{{e.professeur}} </td>
+        <td>{{e.lib_anneescolaire}}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+</div>
+</div>
+</div>
+    
+
+
+{% endblock %} 
+
+
+{% block js %}
+<script>
+$(document).ready(function() {
+ 
+} );
+</script>
+{% endblock %}

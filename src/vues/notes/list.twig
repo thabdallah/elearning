@@ -1,0 +1,112 @@
+{% extends 'layout_professeur.twig' %}
+
+{% block title %} Liste des module {% endblock  %}
+
+{% block content %} 
+
+{% if result.error|length > 0 %}
+<div class="alert alert-danger">
+  <strong>{{ result.error }}</strong> 
+</div>
+{% else %}
+  {% if result.success|length > 0 %}
+<div class="alert alert-success">
+  <strong>{{ result.success }}</strong> 
+</div>
+{% endif %}
+{% endif %}
+<h3 align=center>GESTION DE NOTE DES ETUDIANTS</h3>
+ <div class="row">
+    <div class="col-sm-3">
+<div class="card">
+  <div class="card-header" style="font-size: 25px; background-color: #21CFFF">Formualaire </div>
+  <div class="card-body">
+<form method="post" action="/noteProf/check" >
+   <div class="mb-3">
+   <label for="" class="form-label">Cours</label>
+   <select class="form-control form-control-md" name="prof_module" required>
+    <option value=''>Veuillez selectionnez un module</option>
+    {% for c in cour %}
+    <option value='{{c.codesect}}'>{{c.lib_module}} {{c.section}}</option>
+    {% endfor %}
+   </select>
+  </div>
+<button type="reset" class="btn btn-danger">VIDER</button>
+<button type="submit" class="btn btn-success" style="float: right">CHECK</button>
+</form>
+  </div>
+</div>
+</div>
+<div class="col-sm-4">
+<div class="card">
+  <div class="card-header" style="font-size: 25px; background-color: #21CFFF; color: black">Liste des étudiants {{ e.section }}</div>
+  <div class="card-body">
+  <form method="post" action="/noteProf/save" id="f1" name="f1">
+ <table class="table table-bordered table-striped">
+    <thead>
+      <tr>
+        <th>ETUDIANTS</th>
+        <th>NOTES</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for e in etudiants %}
+       <tr>
+        <td value ='{{ e.id_etudiant_section }}'>{{ e.etudiants }}</td>
+        <td><input type="number"
+     class="form-control form-control-md" name="notes" autocomplete="off" required> </td>
+      </tr>
+      <input type='hidden' value='{{ e.id_etudiant_section }}' name='etudiantss'>
+    {% endfor %}
+    </tbody>
+  </table>
+  <button type="submit" class="btn btn-success" style="float: right">AJOUTER</button>
+  </form>
+  </div>
+  <input type='hidden' value='12' name='prof_module' form="f1">
+</div>
+</div>
+
+    <div class="col-sm-5">
+<div class="card">
+  <div class="card-header" style="font-size: 25px; background-color: #21CFFF; color: BLACK">Les notes des etudiant</div>
+  <div class="card-body data_table">
+ <table class="table table-bordered table-striped " id="example" style="width:100%">
+    <thead>
+      <tr>
+        <th>ETUDIANTS</th>
+        <th>NOTES</th>
+        <th>ACTIONS</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for n in notes %}
+       <tr>
+        <td> {{n.etudiants}} </td>
+        <td> {{n.examen}} </td>
+        <td>
+        <a href="/niveau/list/EDIT/{{ n.id_niveau }}" class="btn btn-outline-primary btn-md">
+          <i class="fa fa-edit"></i>
+        </a>
+        <a href="/niveau/delete/{{ n.id_niveau }}" class="btn btn-outline-danger btn-md" onclick="return window.confirm('Etes vous sure vouloir supprimer ce niveau ?')">
+          <i class="fa fa-trash"></i>
+        </a>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+</div>
+ </div>
+
+</div>
+   
+{% endblock %} 
+
+{% block js %}
+<script>
+$(document).ready(function() {
+ 
+} );
+</script>
+{% endblock %}

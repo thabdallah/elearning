@@ -1,0 +1,130 @@
+{% extends 'layout_etudiant.twig' %}
+
+{% block title %} Liste des cours {% endblock  %}
+
+{% block content %} 
+
+
+{% if result.error|length > 0 %}
+<div class="alert alert-danger">
+  <strong>{{ result.error }}</strong> 
+</div>
+{% else %}
+  {% if result.success|length > 0 %}
+<div class="alert alert-success">
+  <strong>{{ result.success }}</strong> 
+</div>
+  {% endif %}
+{% endif %}
+
+<marquee behavior="alternate"><h3>BIENVENU  Mr/Mme {{who_done}}</h3></marquee>
+<br>
+ {#
+ <div class="row">
+    <div class="col-sm-4">
+<div class="card">
+  <div class="card-header" style="font-size: 25px; background-color: #21CFFF">Veuillez renseigner le formilaire</div>
+  <div class="card-body">
+<form method="post" action="/module/save">
+
+<div class="mb-3">
+   <label for="" class="form-label">Année</label>
+   <select class="form-control form-control-md" name="annee" required>
+    <option value=''>Veuillez selectionnez une année</option>
+    <option value=''>2021-2022</option>
+    <option value=''>2022-2023</option>
+   </select>
+  </div>
+<div class="mb-3">
+   <label for="" class="form-label">Ma classe</label>
+   <select class="form-control form-control-md" name="classe" required>
+    <option value=''>Veuillez selectionnez une classe</option>
+    <option value=''>Genie Logiciel Master 2</option>
+   </select>
+  </div>
+ <div class="mb-3">
+   <label for="" class="form-label">Cours</label>
+   <select class="form-control form-control-md" name="cours" required>
+    <option value=''>Veuillez selectionnez un cours</option>
+    <option value=''>XML</option>
+   </select>
+  </div>
+
+
+
+</form>
+  </div>
+
+</div>
+    </div>
+#}
+    <div class="col-sm-12">
+<div class="card">
+
+  <div class="card-header" style="font-size: 25px; background-color: blue; color: white">Liste des cours</div>
+  <div class="card-body">
+ <table class="table table-bordered" id="dTable" >
+    <thead>
+      <tr>
+        <th>MODULE</th>
+        <th>ENSEIGNEMENTS(COURS)</th>
+        <th>EVALUATIONS(TD, TP, PROJETS)</th>
+        <th>TUTORIAL</th>
+        <th>ENSEIGNANT</th>
+        <th>NOTES</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for c in cours %} 
+       <tr>
+        <td value='{{c.id_module}}'>{{c.lib_module}}</td>
+        <td value='{{c.id_module}}'><div class="button-download"> 
+        <a href="/etudiant/downloadCours/{{c.id_module}}" target='_blank' class="btn btn-outline-primary btn-md" class="button in-single-download">
+          <i class="fa fa-download"></i> Télécharger
+        </a> 
+        </div>
+        </td>
+        <td>
+        {% if c.chemin_evaluation is not same as (null) %}
+        <a href="/etudiant/downloadEvaluation/{{c.id_module}}" target='_blank' class="btn btn-outline-primary btn-md" class="button in-single-download">
+          <i class="fa fa-download"></i> Télécharger
+        </a>
+        {% else %}
+        <a target='_blank' class="btn btn-outline-warning btn-md disabled">
+          <i class="fa fa-ban"></i>
+        </a>
+        {% endif %}
+        </td>
+        <td>
+        {% if c.chemin_tutorial is not same as (null) %} 
+        <div class="button-download"> 
+        <a href="/etudiant/downloadTutorial/{{c.id_module}}" target='_blank' class="btn btn-outline-primary btn-md">
+          <i class="fa fa-download"></i> Télécharger 
+        </a>
+        </div>
+        {% else %}
+        <a target='_blank' class="btn btn-outline-warning btn-md disabled">
+          <i class="fa fa-ban"></i>
+        </a>
+        {% endif %}
+        </td> 
+        <td value='{{c.id_module}}'>{{c.professeur}}</td>
+        <td><a href="/note/list">Voir</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  </div>
+</div>
+</div>
+</div>
+{% endblock %} 
+
+
+{% block js %}
+<script>
+$(document).ready(function() {
+ 
+} );
+</script>
+{% endblock %}

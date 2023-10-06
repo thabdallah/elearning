@@ -1,0 +1,118 @@
+{% extends 'layout.twig' %}
+
+{% block title %} Liste des années {% endblock  %}
+
+{% block content %} 
+
+
+{% if result.error|length > 0 %}
+<div class="alert alert-danger">
+  <strong>{{ result.error }}</strong> 
+</div>
+{% else %}
+  {% if result.success|length > 0 %}
+<div class="alert alert-success">
+  <strong>{{ result.success }}</strong> 
+</div>
+  {% endif %}
+{% endif %}
+<h4 align='center'>GESTION DES ANNEES</h4>
+<h4 style='color:green', align='center'>ANNEE EN COURS :{{anneee.lib_anneescolaire}}</h4>
+ 
+  {% if viewMode=='CREATE' %}
+
+ <div class="row">
+    <div class="col-sm-4">
+<div class="card">
+  <div class="card-header" style="font-size: 25px; background-color: #21CFFF">Formualaire ajout année</div>
+  <div class="card-body">
+<form method="post" action="/annee/save">
+ <div class="mb-3">
+   <label for="" class="form-label">Annee</label>
+   <input type="text"
+     class="form-control form-control-lg" name="annee" placeholder="Entrer l'année" autocomplete="off" required>
+ </div>
+
+<button type="reset" class="btn btn-danger">VIDER</button>
+<button type="submit" class="btn btn-success" style="float: right">AJOUTER</button>
+
+</form>
+  </div>
+
+</div>
+</div>
+
+
+    <div class="col-sm-8">
+<div class="card">
+  <div class="card-header" style="font-size: 25px; background-color: #903800; color: white">Liste des années</div>
+  <div class="card-body data_table">
+ <table class="table table-bordered table-striped " id="example" style="width:100%">
+    <thead>
+      <tr>
+        <th>ANNEE</th>
+        <th>ACTIONS</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for a in annees %}
+       <tr>
+        <td>{{a.lib_anneescolaire}}</td>
+        <td>
+        <a href="/annee/list/EDIT/{{ a.id_anneescolaire }}" class="btn btn-outline-primary btn-md">
+          <i class="fa fa-edit"></i>
+        </a>
+        <a href="/annee/delete/{{ a.id_anneescolaire }}" class="btn btn-outline-danger btn-md" onclick="return window.confirm('Etes vous sure vouloir supprimer cette année ?')">
+          <i class="fa fa-trash"></i>
+        </a>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  </div>
+</div>
+</div>
+</div>
+
+{% endif %}
+
+{% if viewMode=='EDIT' %}
+ <div class='row'>
+    <div class='offset-sm-4 col-sm-4'>
+
+<div class="card">
+  <div class="card-header" style="font-size: 25px; background-color: #00E161">Formualaire modification annee </div>
+  <div class="card-body">
+<form method="post" action="/annee/edit">
+<div class="mb-3">
+   <label for="" class="form-label">Année</label>
+   <input type="text"
+     class="form-control form-control-lg" value='{{annee.lib_anneescolaire}}' name="annee"  required>
+ </div>
+
+<input type='hidden' value='{{annee.id_anneescolaire}}' name='id'>
+
+<a href="/annee/list/CREATE" class="btn btn-danger">RETOUR</a>
+<button type="submit" class="btn btn-success" style="float: right">MODIFIER</button>
+  
+</form>
+</div>
+</div>
+
+
+ </div>
+ {% endif %}
+    
+
+
+{% endblock %} 
+
+
+{% block js %}
+<script>
+$(document).ready(function() {
+ 
+} );
+</script>
+{% endblock %}

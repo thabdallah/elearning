@@ -1,0 +1,198 @@
+{% extends 'layout.twig' %}
+
+{% block title %} Liste des etudiants {% endblock  %}
+
+{% block content %} 
+
+
+{% if result.error|length > 0 %}
+<div class="alert alert-danger">
+  <strong>{{ result.error }}</strong> 
+</div>
+{% else %}
+  {% if result.success|length > 0 %}
+<div class="alert alert-success">
+  <strong>{{ result.success }}</strong> 
+</div>
+  {% endif %}
+{% endif %}
+<h4 align='center'>GESTION DES ETUDIANTS</h4>
+<h4 style='color:green', align='center'>ANNEE EN COURS {{annee.lib_anneescolaire}}</h4>
+
+  {% if viewMode=='CREATE' %}
+
+ <div class="row">
+    <div class="col-sm-4">
+<div class="card">
+  <div class="card-header" style="font-size: 25px; background-color: #21CFFF">Formualaire ajout etudiants</div>
+  <div class="card-body">
+<form method="post" action="/etudiant/save">
+ <div class="mb-3">
+   <label for="" class="form-label">Matricule*</label>
+   <input type="text"
+     class="form-control form-control-md" name="matricule"  placeholder="Entrer le matricule" autocomplete="off" required>
+ </div>
+
+  <div class="mb-3">
+   <label for="" class="form-label">Nom*</label>
+   <input type="text"
+     class="form-control form-control-md" name="nom"   placeholder="Entrer le nom" autocomplete="off" required>
+ </div>
+
+  <div class="mb-3">
+   <label for="" class="form-label">Prenom*</label>
+   <input type="text"
+     class="form-control form-control-md" name="prenom"  placeholder="Entrer le prenom" autocomplete="off" required>
+ </div>
+
+<div class="mb-3">
+   <label for="" class="form-label">Téléphone*</label>
+   <input type="number"
+     class="form-control form-control-md" name="age"  placeholder="Entrer le numero de téléphone" autocomplete="off" required>
+ </div>
+
+
+  <div class="mb-3">
+   <label for="" class="form-label">Nationnalite*</label>
+   <select class="form-control form-control-md select2menu" name="nationnalite" required>
+    <option value=''>Veuillez selectionnez une nationnalite</option>
+    <option value='Nigerienne'>Nigerienne</option>
+    <option value='Malienne'>Malienne</option>
+    <option value='Nigerianne'>Nigerianne</option>
+    <option value='Togolaise'>Togolaise</option>
+    <option value='Burkinabe'>Burkinabe</option>
+    <option value='Ivoirienne'>Ivoirienne</option>
+   </select>
+  </div>
+
+   <div class="mb-3">
+   <label for="" class="form-label">Mail*</label>
+   <input type="mail"
+     class="form-control form-control-md" name="mail"  placeholder="Entrer mail" autocomplete="off" required>
+    </div>
+<button type="reset" class="btn btn-danger">VIDER</button>
+<button type="submit" class="btn btn-success" style="float: right">AJOUTER</button>
+</form>
+  </div>
+
+</div>
+    </div>
+
+    <div class="col-sm-8">
+<div class="card">
+  <div class="card-header" style="font-size: 25px; background-color: #903800; color: white">Liste des étudiants</div>
+  <div class="card-body data_table">
+ <table class="table table-bordered table-striped " id="example" style="width:100%">
+    <thead>
+      <tr>
+        <th>MATRICULE</th>
+        <th>NOM</th>
+        <th>PRENOM</th>
+        <th>TELEPHONE</th>
+        <th>NATIONNALITE</th>
+        <th>MAIL</th>
+        <th>ACTIONS</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for e in etudiants %}
+       <tr>
+        <td>{{e.matricule_etudiant}}</td>
+        <td>{{e.nom_etudiant}}</td>
+        <td>{{e.prenom_etudiant}}</td>
+        <td>{{e.age_etudiant}}</td>
+      <td>{{e.nationalite}}</td>
+      <td>{{e.mail_etudiant}}</td>
+        <td>
+        <a href="/etudiant/list/EDIT/{{ e.id_etudiant }}" class="btn btn-outline-primary btn-md">
+          <i class="fa fa-edit"></i>
+        </a>
+        <a href="/etudiant/delete/{{ e.id_etudiant }}" class="btn btn-outline-danger btn-md" onclick="return window.confirm('Etes vous sure de vouloir supprimer cet etudiant')">
+          <i class="fa fa-trash"></i>
+        </a>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  
+  </div>
+
+</div>
+    </div>
+
+    
+</div>
+ 
+ {% endif %}
+ 
+{% if viewMode=='EDIT' %}
+ <div class='row'>
+    <div class='offset-sm-4 col-sm-4'>
+<div class="card">
+  <div class="card-header" style="font-size: 25px; background-color: #00E161">Formualaire modification etudiants </div>
+  <div class="card-body">
+<form method="post" action="/etudiant/edit">
+<div class="mb-3">
+   <label for="" class="form-label">Matricule</label>
+   <input type="text"
+     class="form-control form-control-md" value='{{etudiant.matricule_etudiant}}' name="matricule" id="matricule" readOnly='readOnly'  required>
+ </div>
+
+ <input type='hidden' value='{{etudiant.id_etudiant}}' name='id'>
+
+  <div class="mb-3">
+   <label for="" class="form-label">Nom*</label>
+   <input type="text"
+     class="form-control form-control-md" value='{{etudiant.nom_etudiant}}' name="nom"   autocomplete="off" required>
+ </div>
+
+  <div class="mb-3">
+   <label for="" class="form-label">Prenom*</label>
+   <input type="text"
+     class="form-control form-control-md" value='{{etudiant.prenom_etudiant}}' name="prenom"    autocomplete="off" required>
+ </div>
+
+<div class="mb-3">
+   <label for="" class="form-label">Téléphone*</label>
+   <input type="text"
+     class="form-control form-control-md" value='{{etudiant.age_etudiant}}' name="age"   autocomplete="off" required>
+ </div>
+
+  <div class="mb-3">
+   <label for="" class="form-label">Nationnalite*</label>
+   <select class="form-control form-control-md" name="nationnalite" required>
+    <option value=''>Veuillez selectionnez une nationnalite</option>
+    <option value='Nigerienne' {% if etudiant.nationalite=='Nigerienne' %} selected='selected'{% endif %}
+    >Nigerienne</option>
+    <option value='Malienne' {% if etudiant.nationalite=='Malienne' %} selected='selected'{% endif %}>Malienne</option>
+    <option value='Nigerianne' {% if etudiant.nationalite=='Nigerianne' %} selected='selected'{% endif %}>Nigerianne</option>
+   </select>
+</div>
+
+<div class="mb-3">
+   <label for="" class="form-label">Mail*</label>
+   <input type="mail"
+     class="form-control form-control-md" value='{{etudiant.mail_etudiant}}' name="mail"  autocomplete="off" required>
+    </div>
+
+<a href="/etudiant/list/CREATE" class="btn btn-danger">RETOUR</a>
+<button type="submit" class="btn btn-success" style="float: right">MODIFIER</button>
+</form>
+</div>
+
+</div>
+</div>
+{% endif %}
+    
+
+
+{% endblock %} 
+
+
+{% block js %}
+<script>
+$(document).ready(function() {
+} );
+</script>
+{% endblock %}

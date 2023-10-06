@@ -1,0 +1,101 @@
+{% extends 'layout_professeur.twig' %}
+
+{% block title %} Liste des module {% endblock  %}
+
+{% block content %} 
+
+
+{% if result.error|length > 0 %}
+<div class="alert alert-danger">
+  <strong>{{ result.error }}</strong> 
+</div>
+{% else %}
+  {% if result.success|length > 0 %}
+<div class="alert alert-success">
+  <strong>{{ result.success }}</strong> 
+</div>
+{% endif %}
+{% endif %}
+<h3 align=center>BIENVENU CHER ENSEIGNANT Mr/Mme {{who_done}}</h3>
+ <div class="row">
+    <div class="col-sm-4">
+<div class="card">
+  <div class="card-header" style="font-size: 25px; background-color: #21CFFF">Formualaire ajout cours</div>
+  <div class="card-body">
+<form method="post" action="/module2/save"  enctype="multipart/form-data">
+ <div class="mb-3">
+   <label for="" class="form-label">Cours</label>
+   <select class="form-control form-control-md" name="prof_module" required>
+    <option value=''>Veuillez selectionnez un cours</option>
+    {% for c in cour %}
+    <option value='{{c.id_prof_module}}'>{{c.lib_module}} {{c.section}} Mr {{c.professeur}}</option>
+    {% endfor %}
+   </select>
+  </div>
+  <div class="mb-3">
+   <label for="" class="form-label">Document</label>
+   <input type="file"
+     class="form-control form-control-md" name="fichier"  placeholder="Entrer le module" autocomplete="off" required>
+ </div>
+<button type="reset" class="btn btn-danger">VIDER</button>
+<button type="submit" class="btn btn-success" style="float: right">UPLOAD</button>
+</form>
+  </div>
+
+</div>
+</div>
+
+    <div class="col-sm-8">
+<div class="card">
+  <div class="card-header" style="font-size: 25px; background-color: blue; color: white">Liste des modules</div>
+  <div class="card-body">
+ <table class="table table-bordered" id="dTable" >
+    <thead>
+      <tr>
+        <th>MODULE</th>
+        <th>ENSEIGNEMENTS(COURS)</th>
+        <th>CLASSE</th>
+        <th>PROFESSEUR</th>
+        <th>ANNEE</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- 
+       <tr>
+        <td>XML</td>
+        <td><a>Document de XML</a></td>
+        <td><a>Genie Logiciel Master 2ème année</a></td>
+        <td><a>2021-2022</a></td>
+      </tr>
+   -->
+   {% for r in cours %}
+       <tr>
+        <td>{{r.lib_module}}</td>
+        <td>{{r.fichier}}</td>
+        <td>{{r.section}}</td>
+        <td>{{r.professeur}} </td>
+        <td>{{r.lib_anneescolaire}} </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  </div>
+</div>
+
+</div>
+
+
+</div>
+    
+
+
+{% endblock %} 
+
+
+{% block js %}
+<script>
+$(document).ready(function() {
+ 
+} );
+</script>
+{% endblock %}

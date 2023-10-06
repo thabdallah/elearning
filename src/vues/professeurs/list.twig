@@ -1,0 +1,192 @@
+{% extends 'layout.twig' %}
+
+{% block title %} Liste des professeurs {% endblock  %}
+
+{% block content %} 
+
+
+{% if result.error|length > 0 %}
+<div class="alert alert-danger">
+  <strong>{{ result.error }}</strong> 
+</div>
+{% else %}
+  {% if result.success|length > 0 %}
+<div class="alert alert-success">
+  <strong>{{ result.success }}</strong> 
+</div>
+  {% endif %}
+{% endif %}
+<h4 align='center'>GESTION DES PROFESSEURS</h4>
+<h4 style='color:green', align='center'>ANNEE EN COURS {{annee.lib_anneescolaire}}</h4>
+  {% if viewMode=='CREATE' %}
+
+ <div class="row">
+    <div class="col-sm-4">
+<div class="card">
+  <div class="card-header" style="font-size: 25px; background-color: #21CFFF">Formualaire ajout professeur</div>
+  <div class="card-body">
+
+<form method="post" action="/professeur/save">
+
+ <div class="mb-3">
+   <label for="" class="form-label">Nom*</label>
+   <input type="text"
+     class="form-control form-control-md" name="nom"  placeholder="Entrer le nom" autocomplete="off" required>
+ </div>
+
+  <div class="mb-3">
+   <label for="" class="form-label">Prenom*</label>
+   <input type="text"
+     class="form-control form-control-md" name="prenom"  placeholder="Entrer le prenom" autocomplete="off" required>
+ </div>
+
+  <div class="mb-3">
+   <label for="" class="form-label">Téléphone*</label>
+   <input type="number"
+     class="form-control form-control-md" name="adresse"   placeholder="Entrer le téléphone" autocomplete="off" required>
+ </div>
+
+<div class="mb-3">
+   <label for="" class="form-label">Diplôme*</label>
+   <input type="text"
+     class="form-control form-control-md" name="diplome" placeholder="Entrer le diplome" autocomplete="off" required>
+ </div>
+
+ <div class="mb-3">
+   <label for="" class="form-label">Mail*</label>
+   <input type="text"
+     class="form-control form-control-md" name="mail" placeholder="Entrer le mail" autocomplete="off" required>
+ </div>
+
+  <div class="mb-3">
+   <label for="" class="form-label">Specialité*</label>
+   <input type="text"
+     class="form-control form-control-md" name="specialite" placeholder="Entrer la specialité" autocomplete="off" required>
+ </div>
+
+<button type="reset" class="btn btn-danger">VIDER</button>
+<button type="submit" class="btn btn-success" style="float: right">AJOUTER</button>
+
+</form>
+  </div>
+
+</div>
+    </div>
+
+    <div class="col-sm-8">
+<div class="card">
+  <div class="card-header" style="font-size: 25px; background-color: #903800; color: white">Liste des professeurs</div>
+  <div class="card-body data_table">
+ <table class="table table-bordered table-striped " id="example" style="width:100%">
+    <thead>
+      <tr>
+        <th>NOM</th>
+        <th>PRENOM</th>
+        <th>TELEPHONE</th>
+        <th>DIPLOME</th>
+        <th>SPECIALITE</th>
+        <th>MAIL</th>
+        <th>ACTIONS</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for p in professeurs %}
+       <tr>
+        <td>{{p.nom_professeur}}</td>
+        <td>{{p.prenom_professeur}}</td>
+        <td>{{p.adresse_professeur}}</td>
+        <td>{{p.diplome}}</td>
+        <td>{{p.specialite}}</td>
+        <td>{{p.mail_professeur}}</td>
+        <td>
+        <a href="/professeur/list/EDIT/{{ p.id_professeur }}" class="btn btn-outline-primary btn-md">
+          <i class="fa fa-edit"></i>
+        </a>
+        <a href="/professeur/delete/{{ p.id_professeur }}" class="btn btn-outline-danger btn-md" onclick="return window.confirm('Etes vous sure de vouloir supprimer ce professeur')">
+          <i class="fa fa-trash"></i>
+        </a>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  
+  </div>
+
+</div>
+    </div>
+
+    
+</div>
+ 
+ {% endif %}
+
+
+{% if viewMode=='EDIT' %}
+ <div class='row'>
+    <div class='offset-sm-4 col-sm-4'>
+
+<div class="card">
+  <div class="card-header" style="font-size: 25px; background-color: #00E161">Formualaire modification professeur </div>
+  <div class="card-body">
+<form method="post" action="/professeur/edit">
+
+ <input type='hidden' value='{{professeur.id_professeur}}' name='id'>
+
+  <div class="mb-3">
+   <label for="" class="form-label">Nom*</label>
+   <input type="text"
+     class="form-control form-control-md" value='{{professeur.nom_professeur}}' name="nom"   autocomplete="off" required>
+ </div>
+
+  <div class="mb-3">
+   <label for="" class="form-label">Prenom*</label>
+   <input type="text"
+     class="form-control form-control-md" value='{{professeur.prenom_professeur}}' name="prenom"    autocomplete="off" required>
+ </div>
+
+<div class="mb-3">
+   <label for="" class="form-label">Téléphone*</label>
+   <input type="number"
+     class="form-control form-control-md" value='{{professeur.adresse_professeur}}' name="adresse"   autocomplete="off" required>
+ </div>
+ <div class="mb-3">
+   <label for="" class="form-label">Diplome*</label>
+   <input type="text"
+     class="form-control form-control-md" value='{{professeur.diplome}}' name="diplome"   autocomplete="off" required>
+ </div>
+ <div class="mb-3">
+   <label for="" class="form-label">Mail*</label>
+   <input type="text"
+     class="form-control form-control-md" value='{{professeur.mail_professeur}}' name="mail"   autocomplete="off" required>
+ </div>
+ <div class="mb-3">
+   <label for="" class="form-label">Specialite*</label>
+   <input type="text"
+     class="form-control form-control-md" value='{{professeur.specialite}}' name="specialite"   autocomplete="off" required>
+ </div>
+ 
+<a href="/professeur/list/CREATE" class="btn btn-danger">RETOUR</a>
+<button type="submit" class="btn btn-success" style="float: right">MODIFIER</button>
+
+
+</form>
+  </div>
+
+</div>
+
+
+ </div>
+ {% endif %}
+    
+
+
+{% endblock %} 
+
+
+{% block js %}
+<script>
+$(document).ready(function() {
+ 
+} );
+</script>
+{% endblock %}

@@ -1,0 +1,70 @@
+.{% extends 'layout_etudiant.twig' %}
+
+{% block title %} NOTE {% endblock  %}
+
+{% block content %} 
+
+
+{% if result.error|length > 0 %}
+<div class="alert alert-danger">
+  <strong>{{ result.error }}</strong> 
+</div>
+{% else %}
+  {% if result.success|length > 0 %}
+<div class="alert alert-success">
+  <strong>{{ result.success }}</strong> 
+</div>
+  {% endif %}
+{% endif %}
+
+
+<br>
+<h2>NOTES</h2>
+<br>
+ 
+
+ <div class="row">
+
+    <div class="col-sm-6">
+<div class="card">
+  <div class="card-header" style="font-size: 25px; background-color: blue; color: white">Liste des notes</div>
+  <div class="card-body">
+ <table class="table table-bordered" >
+    <thead>
+      <tr>
+        <th>MODULE</th>
+        <th>EXAMEN</th>
+        <th>SESSION</th>
+      </tr>
+    </thead>
+    <tbody>
+       
+       <tr>
+        <td>XML</td>
+        <td>20</td>
+        <td></td>
+      </tr>
+   
+    </tbody>
+  </table>
+  <a href="/module1/list/" class="btn btn-danger">RETOUR</a>
+  </div>
+
+</div>
+</div>
+
+    
+</div>
+    
+
+
+{% endblock %} 
+
+
+{% block js %}
+<script>
+$(document).ready(function() {
+ 
+} );
+</script>
+{% endblock %}

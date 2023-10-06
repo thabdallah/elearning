@@ -1,0 +1,185 @@
+{% extends 'layout.twig' %}
+
+{% block title %} Liste des utilisateurs {% endblock  %}
+
+{% block content %} 
+
+
+{% if result.error|length > 0 %}
+<div class="alert alert-danger">
+  <strong>{{ result.error }}</strong> 
+</div>
+{% else %}
+  {% if result.success|length > 0 %}
+<div class="alert alert-success">
+  <strong>{{ result.success }}</strong> 
+</div>
+  {% endif %}
+{% endif %}
+<h4 align='center'>GESTION DES UTILISATEURS </h4>
+<h4 align='center'style='color: green'>ANNEE EN COURS : {{annee.lib_anneescolaire}}</h4>
+  {% if viewMode=='CREATE' %}
+
+ <div class="row">
+    <div class="col-sm-4">
+<div class="card">
+  <div class="card-header" style="font-size: 25px; background-color: #21CFFF">Formualaire ajout utilisateur</div>
+  <div class="card-body">
+<form method="post" action="/utilisateur/save">
+<div class="mb-3">
+  <label for="" class"form-label">Nom*</label>
+  <input type="text" class="form-control form-control-md" name="nom"   placeholder="Entrer le nom" autocomplete="off" required>
+</div>
+<div class="mb-3">
+  <label for="" class"form-label">Prenom*</label>
+  <input type="text" class="form-control form-control-md" name="prenom"   placeholder="Entrer le prenom" autocomplete="off" required>
+</div>
+<div class="mb-3">
+   <label for="" class="form-label">Login*</label>
+   <input type="text" class="form-control form-control-md" name="login"   placeholder="Entrer le login" autocomplete="off" required>
+ </div>
+
+  <div class="mb-3">
+   <label for="" class="form-label">Mot de passe*</label>
+   <input type="password"
+     class="form-control form-control-md" name="motdepasse"  placeholder="Entrer le mot de passe" autocomplete="off" required>
+ </div>
+
+<div class="mb-3">
+   <label for="" class="form-label">Profile*</label>
+      <select name='profil' class="form-control form-control-md" required>
+        <option value=''>Veuillez choisir un profil</option>
+        <option value='admin'>Admin</option>
+        <option value='scolarite'>Scolarite</option>
+    </select>
+ </div>
+
+<button type="reset" class="btn btn-danger">VIDER</button>
+<button type="submit" class="btn btn-success" style="float: right">AJOUTER</button>
+
+
+</form>
+  </div>
+
+</div>
+    </div>
+
+
+    <div class="col-sm-8">
+<div class="card">
+  <div class="card-header" style="font-size: 25px; background-color: #903800; color: white">Liste des utilisateurs</div>
+  <div class="card-body data_table">
+ <table class="table table-bordered table-striped " id="example" style="width:100%">
+    <thead>
+      <tr>
+        <th>NOM</th>
+        <th>PRENOM</th>
+        <th>LOGIN</th>
+        <th>MOT DE PASSE</th>
+        <th>PROFILE</th>
+        <th>ACTIONS</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for u in utilisateurs %}
+       <tr>
+        <td>{{u.nom_utilisateur}}</td>
+        <td>{{u.prenom_utilisateur}}</td>
+        <td>{{u.login}}</td>
+        <td>{{u.motdepasse}}</td>
+        <td>{{u.profil}}</td>
+        <td>
+        <a href="/utilisateur/list/EDIT/{{ u.id_utilisateur }}" class="btn btn-outline-primary btn-md">
+          <i class="fa fa-edit"></i>
+        </a>
+        {% if u.is_active is not same as (false) %}
+        <a href="/utilisateur/desactive/{{ u.id_utilisateur }}" class="btn btn-outline-success btn-md" onclick="return window.confirm('Voulez vous desactiver ce compte ?')">
+          <i class="fa fa-unlock"></i>
+        </a>
+        {% else %}
+         <a href="/utilisateur/active/{{ u.id_utilisateur }}" class="btn btn-outline-warning btn-md" onclick="return window.confirm('Voulez vous activer ce compte ?')">
+          <i class="fa fa-unlock-alt"></i>
+        </a> 
+        {% endif %}
+        <a href="/utilisateur/reinitialise/{{ u.id_utilisateur }}" class="btn btn-outline-primary btn-md" onclick="return window.confirm('Etes vous sure de vouloir reinitialiser')">
+          <i class="fa fa-refresh"></i>
+        </a>
+        </td>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  </div>
+</div>
+</div> 
+</div>
+ 
+ {% endif %}
+
+{% if viewMode=='EDIT' %}
+ <div class='row'>
+    <div class='offset-sm-4 col-sm-4'>
+
+<div class="card">
+  <div class="card-header" style="font-size: 25px; background-color: #00E161">Formualaire modification utilisateur </div>
+  <div class="card-body">
+<form method="post" action="/utilisateur/edit">
+<div class="mb-3">
+   <label for="" class="form-label">Nom *</label>
+   <input type="text"
+     class="form-control form-control-lg" value='{{utilisateur.nom_utilisateur}}' name="nom" autocomplete="off"  required>
+ </div>
+
+<div class="mb-3">
+   <label for="" class="form-label">Prenom *</label>
+   <input type="text"
+     class="form-control form-control-lg" value='{{utilisateur.prenom_utilisateur}}' name="prenom"  autocomplete="off"  required>
+ </div>
+
+<div class="mb-3">
+   <label for="" class="form-label">Login *</label>
+   <input type="text"
+     class="form-control form-control-lg" value='{{utilisateur.login}}' name="login" id="login" autocomplete="off"  required>
+ </div>
+
+ <input type='hidden' value='{{utilisateur.id_utilisateur}}' name='id'>
+
+  <div class="mb-3">
+   <label for="" class="form-label">Mot de passe *</label>
+   <input type="password"
+     class="form-control form-control-lg" value='{{utilisateur.motdepasse}}' name="motdepasse" size="10"  autocomplete="off" required>
+ </div>
+<div class="mb-3">
+   <label for="" class="form-label">Profile *</label>
+      <select name='profil' class="form-control form-control-md" required>
+        {% for u in utilisateurs %}
+         <option value='{{u.profil}}' {% if u.profil==utilisateur.profil %} selected {% endif %} >{{ u.profil}}</option>
+        {% endfor %}
+    </select>
+ </div>
+
+<a href="/utilisateur/list/CREATE" class="btn btn-danger">RETOUR</a>
+<button type="submit" class="btn btn-success" style="float: right">MODIFIER</button>
+
+
+</form>
+  </div>
+
+</div>
+
+
+ </div>
+ {% endif %}
+    
+
+
+{% endblock %} 
+
+
+{% block js %}
+<script>
+$(document).ready(function() {
+ 
+} );
+</script>
+{% endblock %}

@@ -1,0 +1,129 @@
+{% extends 'layout.twig' %}
+
+{% block title %} Liste des niveaux {% endblock  %}
+
+{% block content %} 
+
+
+{% if result.error|length > 0 %}
+<div class="alert alert-danger">
+  <strong>{{ result.error }}</strong> 
+</div>
+{% else %}
+  {% if result.success|length > 0 %}
+<div class="alert alert-success">
+  <strong>{{ result.success }}</strong> 
+</div>
+  {% endif %}
+{% endif %}
+<h4 align='center'>GESTION DES NIVEAUX</h4>
+<h4 style='color:green' align='center'>ANNEE EN COURS EST : {{annee.lib_anneescolaire}}</h4>
+
+  {% if viewMode=='CREATE' %}
+
+ <div class="row">
+    <div class="col-sm-4">
+<div class="card">
+  <div class="card-header" style="font-size: 25px; background-color: #21CFFF">Formualaire ajout niveau</div>
+  <div class="card-body">
+<form method="post" action="/niveau/save">
+ <div class="mb-3">
+   <label for="" class="form-label">Niveau*</label>
+   <input type="text"
+     class="form-control form-control-lg" name="nomNiveau" placeholder="Entrer le niveau" autocomplete="off" required>
+ </div>
+
+<button type="reset" class="btn btn-danger">VIDER</button>
+<button type="submit" class="btn btn-success" style="float: right">AJOUTER</button>
+
+
+</form>
+  </div>
+
+</div>
+    </div>
+
+
+    <div class="col-sm-8">
+<div class="card">
+  <div class="card-header" style="font-size: 25px; background-color: #903800; color: white">Liste des niveaux</div>
+  <div class="card-body data_table">
+ <table class="table table-bordered table-striped " id="example" style="width:100%">
+    <thead>
+      <tr>
+        <th>NIVEAU</th>
+        <th>ACTIONS</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for n in niveaux %}
+       <tr>
+        <td>{{n.lib_niveau}}</td>
+        
+        <td>
+        <a href="/niveau/list/EDIT/{{ n.id_niveau }}" class="btn btn-outline-primary btn-md">
+          <i class="fa fa-edit"></i>
+        </a>
+        <a href="/niveau/delete/{{ n.id_niveau }}" class="btn btn-outline-danger btn-md" onclick="return window.confirm('Etes vous sure vouloir supprimer ce niveau ?')">
+          <i class="fa fa-trash"></i>
+        </a>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  
+  </div>
+
+</div>
+    </div>
+
+    
+</div>
+ 
+ {% endif %}
+
+
+{% if viewMode=='EDIT' %}
+ <div class='row'>
+    <div class='offset-sm-4 col-sm-4'>
+
+<div class="card">
+  <div class="card-header" style="font-size: 25px; background-color: #00E161">Formualaire modification niveau </div>
+  <div class="card-body">
+<form method="post" action="/niveau/edit">
+<div class="mb-3">
+   <label for="" class="form-label">Niveau*</label>
+   <input type="text"
+     class="form-control form-control-lg" value='{{niveau.lib_niveau}}' name="nomNiveau"  required>
+ </div>
+
+ <input type='hidden' value='{{niveau.id_niveau}}' name='id'>
+
+
+
+
+<a href="/niveau/list/CREATE" class="btn btn-danger">RETOUR</a>
+<button type="submit" class="btn btn-success" style="float: right">MODIFIER</button>
+
+
+</form>
+  </div>
+
+</div>
+
+
+ </div>
+ {% endif %}
+    
+
+
+{% endblock %} 
+
+
+{% block js %}
+<script>
+$(document).ready(function() {
+ 
+} );
+</script>
+{% endblock %}

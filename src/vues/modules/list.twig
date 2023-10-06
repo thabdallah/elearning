@@ -1,0 +1,163 @@
+{% extends 'layout.twig' %}
+
+{% block title %} Liste des module {% endblock  %}
+
+{% block content %} 
+
+
+{% if result.error|length > 0 %}
+<div class="alert alert-danger">
+  <strong>{{ result.error }}</strong> 
+</div>
+{% else %}
+  {% if result.success|length > 0 %}
+<div class="alert alert-success">
+  <strong>{{ result.success }}</strong> 
+</div>
+  {% endif %}
+{% endif %}
+<h4 align='center'>GESTION DES MODULES</h4>
+<h4 align='center'style='color: green'>ANNEE EN COURS : {{annee.lib_anneescolaire}}</h4>
+  {% if viewMode=='CREATE' %}
+
+ <div class="row">
+    <div class="col-sm-4">
+<div class="card">
+  <div class="card-header" style="font-size: 25px; background-color: #21CFFF">Formualaire ajout module</div>
+  <div class="card-body">
+<form method="post" action="/module/save">
+ <div class="mb-3">
+   <label for="" class="form-label">Libellé *</label>
+   <input type="text" class="form-control form-control-md" name="nom"  placeholder="Entrer le module" autocomplete="off" required>
+ </div>
+
+  <div class="mb-3">
+   <label for="" class="form-label">Duree *</label>
+   <input type="number" class="form-control form-control-md" name="duree"   placeholder="Entrer la duree" autocomplete="off" required>
+ </div>
+
+  <div class="mb-3">
+   <label for="" class="form-label">Coeficient *</label>
+   <input type="number"
+     class="form-control form-control-md" name="coeficient"  placeholder="Entrer le coeficient" autocomplete="off" required>
+ </div>
+ {# <div class="mb-3">
+   <label for="" class="form-label">Section *</label>
+   <select name='section' class="form-control form-control-md select2menu" required>
+      <option value=''>Veuillez choisir une section</option>
+      {% for s in sections %}
+        <option value='{{s.id_section}}'>{{s.lib_filiere}} {{s.lib_niveau}}</option>
+      {% endfor %}
+   </select>
+ </div> #}
+<button type="reset" class="btn btn-danger">VIDER</button>
+<button type="submit" class="btn btn-success" style="float: right">AJOUTER</button>
+</form>
+  </div>
+
+</div>
+    </div>
+
+    <div class="col-sm-8">
+<div class="card">
+  <div class="card-header" style="font-size: 25px; background-color: #903800; color: white">Liste des modules</div>
+  <div class="card-body data_table">
+ <table class="table table-bordered table-striped " id="example" style="width:100%">
+    <thead>
+      <tr>
+        <th>LIBELLE</th>
+        <th>DUREE</th>
+        <th>COEFICIENT</th>
+        <th>ACTIONS</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for m in modules %}
+       <tr>
+        <td>{{m.lib_module}}</td>
+        <td>{{m.duree_module}}</td>
+        <td>{{m.coef_module}}</td>
+        <td>
+        <a href="/module/list/EDIT/{{m.id_module}}" class="btn btn-outline-primary btn-md">
+          <i class="fa fa-edit"></i>
+        </a>
+        <a href="/module/list/delete/{{m.id_module}}" class="btn btn-outline-danger btn-md" onclick="return window.confirm('Etes vous sure vouloir supprimer ce module ?')">
+          <i class="fa fa-trash"></i>
+        </a>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  
+  </div>
+
+</div>
+</div>
+
+    
+</div>
+ 
+ {% endif %}
+
+
+{% if viewMode=='EDIT' %}
+ <div class='row'>
+    <div class='offset-sm-4 col-sm-4'>
+
+<div class="card">
+  <div class="card-header" style="font-size: 25px; background-color: #00E161">Formualaire modification module</div>
+  <div class="card-body">
+<form method="post" action="/module/edit">
+<div class="mb-3">
+   <label for="" class="form-label">Nom *</label>
+   <input type="text"
+     class="form-control form-control-md" value='{{module.lib_module}}' name="nom" id="nom" required>
+ </div>
+
+ <input type='hidden' value='{{module.id_module}}' name='id'>
+
+  <div class="mb-3">
+   <label for="" class="form-label">Duree *</label>
+   <input type="number"
+     class="form-control form-control-md" value='{{module.duree_module}}' name="duree"    autocomplete="off" required>
+ </div>
+
+<div class="mb-3">
+   <label for="" class="form-label">Coeficient *</label>
+   <input type="number"
+     class="form-control form-control-md" value='{{module.coef_module}}' name="coeficient"   autocomplete="off" required>
+ </div>
+
+ <div class="mb-3">
+   <label for="" class="form-label">Section *</label>
+   <select name='section' class="form-control form-control-md select2menu" required>
+      <option value=''>Veuillez choisir une section</option>
+      {% for s in sections %}
+        <option value='{{s.id_section}}' {% if s.id_section == module.section %} selected {% endif %}>{{s.lib_filiere}} {{s.lib_niveau}}</option>
+      {% endfor %}
+   </select>
+ </div>
+
+<a href="/module/list/CREATE" class="btn btn-danger">RETOUR</a>
+<button type="submit" class="btn btn-success" style="float: right">MODIFIER</button>
+</form>
+  </div>
+
+</div>
+
+
+ </div>
+ {% endif %}
+    
+
+
+{% endblock %} 
+
+
+{% block js %}
+<script>
+$(document).ready(function() {
+ 
+} );
+</script>
+{% endblock %}

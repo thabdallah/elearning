@@ -1,0 +1,126 @@
+{% extends 'layout.twig' %}
+
+{% block title %} Liste des filières {% endblock  %}
+
+{% block content %} 
+
+
+{% if result.error|length > 0 %}
+<div class="alert alert-danger">
+  <strong>{{ result.error }}</strong> 
+</div>
+{% else %}
+  {% if result.success|length > 0 %}
+<div class="alert alert-success">
+  <strong>{{ result.success }}</strong> 
+</div>
+  {% endif %}
+{% endif %}
+<h4 align='center'>GESTION DES FILIERES</h4>
+<h4 style='color: green', align='center'>ANNEE EN COURS : {{annee.lib_anneescolaire}}</h4>
+  {% if viewMode=='CREATE' %}
+
+ <div class="row">
+    <div class="col-sm-4">
+<div class="card">
+  <div class="card-header" style="font-size: 25px; background-color: #21CFFF">Formualaire ajout filières</div>
+  <div class="card-body">
+<form method="post" action="/filiere/save">
+ <div class="mb-3">
+   <label for="" class="form-label">Filière*</label>
+   <input type="text"
+     class="form-control form-control-lg" name="nomfiliere" id="nomfiliere" placeholder="Entrer la filiere" autocomplete="off" required>
+ </div>
+
+<button type="reset" class="btn btn-danger">VIDER</button>
+<button type="submit" class="btn btn-success" style="float: right">AJOUTER</button>
+
+</form>
+  </div>
+
+</div>
+    </div>
+
+    <div class="col-sm-8">
+<div class="card">
+  <div class="card-header" style="font-size: 25px; background-color: #903800; color: white">Liste des filières</div>
+  <div class="card-body data_table">
+ <table class="table table-bordered table-striped " id="example" style="width:100%">
+    <thead>
+      <tr>
+        <th>FILIERE</th>
+        <th>ACTIONS</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for f in filieres %}
+       <tr>
+        <td>{{f.lib_filiere}}</td>
+        
+        <td>
+        <a href="/filiere/list/EDIT/{{ f.id_filiere }}" class="btn btn-outline-primary btn-md">
+          <i class="fa fa-edit"></i>
+        </a>
+        <a href="/filiere/delete/{{ f.id_filiere }}" class="btn btn-outline-danger btn-md" onclick="return window.confirm('Etes vous sure vouloir supprimer cette filière ?')">
+          <i class="fa fa-trash"></i>
+        </a>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  
+  </div>
+
+</div>
+    </div>
+
+    
+</div>
+ 
+ {% endif %}
+
+
+{% if viewMode=='EDIT' %}
+ <div class='row'>
+    <div class='offset-sm-4 col-sm-4'>
+
+<div class="card">
+  <div class="card-header" style="font-size: 25px; background-color: #00E161">Formualaire modification etudiants </div>
+  <div class="card-body">
+<form method="post" action="/filiere/edit">
+<div class="mb-3">
+   <label for="" class="form-label">Filière</label>
+   <input type="text"
+     class="form-control form-control-lg" value='{{filiere.lib_filiere}}' name="nomfiliere"  required>
+ </div>
+
+ <input type='hidden' value='{{filiere.id_filiere}}' name='id'>
+
+
+
+
+<a href="/filiere/list/CREATE" class="btn btn-danger">RETOUR</a>
+<button type="submit" class="btn btn-success" style="float: right">MODIFIER</button>
+
+
+</form>
+  </div>
+
+</div>
+
+
+ </div>
+ {% endif %}
+    
+
+
+{% endblock %} 
+
+
+{% block js %}
+<script>
+$(document).ready(function() {
+ 
+} );
+</script>
+{% endblock %}

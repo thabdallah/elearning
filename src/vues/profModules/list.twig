@@ -1,0 +1,195 @@
+{% extends 'layout.twig' %}
+
+{% block title %} Liste des prof module {% endblock  %}
+
+{% block content %} 
+
+
+{% if result.error|length > 0 %}
+<div class="alert alert-danger">
+  <strong>{{ result.error }}</strong> 
+</div>
+{% else %}
+  {% if result.success|length > 0 %}
+<div class="alert alert-success">
+  <strong>{{ result.success }}</strong> 
+</div>
+  {% endif %}
+{% endif %}
+
+<h4 align ='center'>GESTION DES PROFESSEURS ET MODULES</h4>
+<h4 style ='color:green' align ="center">ANNEE EN COURS EST : {{annee.lib_anneescolaire}}</h4>
+ 
+  {% if viewMode=='CREATE' %}
+
+ <div class="row">
+    <div class="col-sm-4">
+<div class="card">
+  <div class="card-header" style="font-size: 25px; background-color: #21CFFF">Formualaire ajout professeur module</div>
+  <div class="card-body">
+<form method="post" action="/profmodule/save">
+ <div class="mb-3">
+   <label for="" class="form-label">Professeur *</label>
+   <select name='professeur' class="form-control form-control-lg select2menu" required>
+      <option value=''>Veuillez choisir un professeur</option>
+      {% for p in professeurs %}
+        <option value='{{p.id_professeur}}'>{{p.nom_professeur}} {{p.prenom_professeur}}</option>
+      {% endfor %}
+   </select>
+ </div>
+
+ <div class="mb-3">
+   <label for="" class="form-label">Module *</label>
+   <select name='module' class="form-control form-control-lg select2menu" required>
+      <option value=''>Veuillez choisir un module</option>
+      {% for m in modules %}
+        <option value='{{m.id_module}}'>{{m.lib_module}}</option>
+      {% endfor %}
+   </select>
+ </div>
+
+ <div class="mb-3">
+   <label for="" class="form-label">Section *</label>
+   <select name='section' class="form-control form-control-md select2menu" required>
+      <option value=''>Veuillez choisir une section</option>
+      {% for s in sections %}
+        <option value='{{s.id_section}}'>{{s.lib_filiere}} {{s.lib_niveau}}</option>
+      {% endfor %}
+   </select>
+ </div>
+<input type='hidden' value='{{annee.id_anneescolaire}}' name='annee'>
+{#<div class="mb-3">
+   <label for="" class="form-label">Annee</label>
+   <select name='annee' class="form-control form-control-lg select2menu" required>
+      <option value=''>Veuillez choisir une annee</option>
+      {% for a in annees %}
+        <option value='{{a.id}}'>{{a.desigannscol}}</option>
+      {% endfor %}
+   </select>
+ </div>
+#}
+<button type="reset" class="btn btn-danger">VIDER</button>
+<button type="submit" class="btn btn-success" style="float: right">AJOUTER</button>
+
+</form>
+  </div>
+
+</div>
+    </div>
+
+    <div class="col-sm-8">
+<div class="card">
+  <div class="card-header" style="font-size: 25px; background-color: #903800; color: white">Liste des profs modules</div>
+  <div class="card-body data_table">
+ <table class="table table-bordered table-striped " id="example" style="width:100%">
+    <thead>
+      <tr>
+        <th>MODULE</th>
+        <th>SECTION</th>
+        <th>PROFESSEUR</th>
+        <th>ANNEE</th>
+        <th>ACTIONS</th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for p in prof_modules %}
+       <tr>
+        <td>{{p.lib_module}}</td>
+        <td>{{p.section}}</td>
+        <td>{{p.professeur}}</td>
+        <td>{{p.lib_anneescolaire}}</td>
+        
+        <td>
+        <a href="/profmodule/list/EDIT/{{ p.id_prof_module}}" class="btn btn-outline-primary btn-md">
+          <i class="fa fa-edit"></i>
+        </a>
+         <a href="/profmodule/delete/{{p.id_prof_module}}" class="btn btn-outline-danger btn-md" onclick="return window.confirm('Etes vous sure vouloir supprimer cet etudiant dans la section ?')">
+          <i class="fa fa-trash"></i>
+        </a>
+      </tr>
+    {% endfor %}
+    </tbody>
+  </table>
+  
+  </div>
+
+</div>
+</div>
+    
+</div>
+ 
+ {% endif %}
+
+
+{% if viewMode=='EDIT' %}
+ <div class='row'>
+    <div class='offset-sm-4 col-sm-4'>
+
+<div class="card">
+  <div class="card-header" style="font-size: 25px; background-color: #00E161">Formualaire modification section </div>
+  <div class="card-body">
+<form method="post" action="/profmodule/edit">
+
+ <input type='hidden' value='{{prof_module.id_prof_module}}' name='id'>
+
+ <div class="mb-3">
+   <label for="" class="form-label">Professeur *</label>
+   <select name='professeur' class="form-control form-control-lg select2menu" required>
+      {% for p in professeurs %}
+        <option value='{{p.id_professeur}}'  {% if p.id_professeur==prof_module.professeur %} selected {% endif %}> {{p.nom_professeur}} {{p.prenom_professeur}}</option>
+      {% endfor %}
+   </select>
+  
+ </div>
+
+ <div class="mb-3">
+   <label for="" class="form-label">Module *</label>
+   <select name='module' class="form-control form-control-lg select2menu" required>
+      {% for m in modules %}
+        <option value='{{m.id_module}}'  {% if m.id_module==prof_module.module %} selected {% endif %}>{{m.lib_module}}</option>
+      {% endfor %}
+   </select>
+  
+ </div>
+<div class="mb-3">
+   <label for="" class="form-label">Section *</label>
+   <select name='section' class="form-control form-control-md select2menu" required>
+      {% for s in sections %}
+        <option value='{{s.id_section}}'{% if s.id_section==prof_module.section %} selected {% endif %}>{{s.lib_filiere}} {{s.lib_niveau}}</option>
+      {% endfor %}
+   </select>
+ </div>
+ <div class="mb-3">
+   <label for="" class="form-label">Annee *</label>
+   <select name='annee' class="form-control form-control-lg select2menu" required>
+      {% for a in annees %}
+        <option value='{{a.id_anneescolaire}}'  {% if a.id_anneescolaire==prof_module.annee %} selected {% endif %}>{{a.lib_anneescolaire}}</option>
+      {% endfor %}
+   </select>
+  
+ </div>
+
+
+
+<a href="/profmodule/list/CREATE" class="btn btn-danger">RETOUR</a>
+<button type="submit" class="btn btn-success" style="float: right">MODIFIER</button>
+
+
+</form>
+  </div>
+
+</div>
+
+
+ </div>
+ {% endif %}
+
+{% endblock %} 
+
+{% block js %}
+<script>
+$(document).ready(function() {
+ 
+} );
+</script>
+{% endblock %}

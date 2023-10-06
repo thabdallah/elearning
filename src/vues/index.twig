@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title></title>
+    </head>
+    <body>
+        <h1>Calculatrice</h1>
+        <form action="calcul" method="post">
+            <table>
+                <tr>
+                <td>Nombre 1:</td>
+                <td><input type="number" name="n1" required></td>
+                </tr>
+                <tr>
+                <td>Nombre 2:</td>
+                <td><input type="number" name="n2" required></td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td>
+                        <select name="operation">
+                            <option name="">Veuilllez entrer l'operation</option>
+                            <option name="+">+</option>
+                            <option name="-">-</option>
+                            <option name="*">*</option>
+                            <option name="/">/</option>
+                            <option name="%">%</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <input type="submit" value="Resultat">
+                    </td>
+                </tr>
+            </table>
+        </form>
+        {% if result %}
+            est egal à :{{result}}
+        {% endif %} 
+    </body>
+</html>

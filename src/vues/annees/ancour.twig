@@ -1,0 +1,61 @@
+{% extends 'layout.twig' %}
+
+{% block title %} Liste des années {% endblock  %}
+
+{% block content %} 
+
+
+{% if result.error|length > 0 %}
+<div class="alert alert-danger">
+  <strong>{{ result.error }}</strong> 
+</div>
+{% else %}
+  {% if result.success|length > 0 %}
+<div class="alert alert-success">
+  <strong>{{ result.success }}</strong> 
+</div>
+  {% endif %}
+{% endif %}
+<br>
+<br>
+ <div class="row">
+    <div class="col-sm-4">
+<div class="card">
+  <div class="card-header" style="font-size: 25px; background-color: #21CFFF">Formualaire ajout annee en cour</div>
+  <div class="card-body">
+<form method="post" action="/annee/en-cours">
+ <div class="mb-3">
+   <label for="" class="form-label">Annee en cours</label>
+   <select name='annee' class="form-control form-control-lg select2menu" required>
+      <option value=''>Veuillez choisir l'année en cour</option>
+      {% for a in annees %}
+        <option value='{{a.id_anneescolaire}}'>{{a.lib_anneescolaire}}</option>
+      {% endfor %}
+   </select>
+  
+ </div>
+
+<button type="submit" class="btn btn-success" style="float: right">VALIDER</button>
+
+
+</form>
+  </div>
+
+</div>
+ 
+</div>
+ <div class="col-sm-8">
+ <h1>L'ANNEE EN COURS EST : {{annee.lib_anneescolaire}}</h1>
+ </div>
+
+
+{% endblock %} 
+
+
+{% block js %}
+<script>
+$(document).ready(function() {
+ 
+} );
+</script>
+{% endblock %}
